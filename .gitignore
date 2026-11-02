@@ -1,0 +1,6 @@
+   obj/
+   bin/
+   *.o
+   *.exe
+   .vscode/
+   .DS_Store

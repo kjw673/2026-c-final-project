@@ -5,8 +5,8 @@
 #define BLACK 1
 #define WHITE 2
 
-void init_board(int board[15][15]);
-void print_board(int board[15][15]);
-void place_stone(int board[15][15], int color);
+void initBoard(int board[15][15]);
+void printBoard(int board[15][15]);
+void placeStone(int board[15][15], int color);
 
 #endif

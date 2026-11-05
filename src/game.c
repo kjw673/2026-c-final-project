@@ -1,20 +1,42 @@
 #include "game.h"
 #include "board.h"
 #include <stdio.h>
-
+#include <stdlib.h>
 
 extern int board[15][15];
 int turn = BLACK;
 
 void newTurn() {
     clearScreen();
+    if(isGameEnd() != 0) {
+        restartGame();
+    }
     printBoard();
-    printf("%s의 차례입니다.\n", turn == BLACK ? "흑" : "백");
+    printf("%s's turn.\n", turn == BLACK ? "Black" : "White");
     inputMove();
-
 }
+
+// Checks whether five consecutive stones are aligned horizontally, vertically, and diagonally.
 int isGameEnd() {
-    
+    for(int i = 0; i < 15; i++) {
+        for(int j = 0; j < 15; j++) {
+            if(board[i][j] != EMPTY) {
+                int color = board[i][j];
+                if(j <= 10 && board[i][j+1] == color && board[i][j+2] == color && board[i][j+3] == color && board[i][j+4] == color) {
+                    return color;
+                }
+                if(i <= 10 && board[i+1][j] == color && board[i+2][j] == color && board[i+3][j] == color && board[i+4][j] == color) {
+                    return color;
+                }
+                if(i <= 10 && j <= 10 && board[i+1][j+1] == color && board[i+2][j+2] == color && board[i+3][j+3] == color && board[i+4][j+4] == color) {
+                    return color;
+                }
+                if(i >= 4 && j <= 10 && board[i-1][j+1] == color && board[i-2][j+2] == color && board[i-3][j+3] == color && board[i-4][j+4] == color) {
+                    return color;
+                }
+            }
+        }
+    }
     return 0;
 }
 
@@ -26,27 +48,57 @@ int isValidPlace(int row, int col) {
 }
 
 void restartGame() {
-    
+    char choice = '\0';
+    printf("%s wins!\n",isGameEnd() == BLACK ? "Black" : "White");
+    while (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N') {
+        printf("Do you want to restart? (y/n): ");
+        scanf(" %c", &choice);
+        if (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N') {
+            clearScreen();
+            printBoard();
+            printf("Invalid input. Please enter 'y' or 'n'.\n");
+        }
+    }
+
+    if(choice == 'y' || choice == 'Y') {
+        initBoard();
+        newTurn();
+    }
+    else{
+        printf("Game over.\n");
+        exit(0);
+    }
 }
 void inputMove() {
-    int row, col;
-    printf("행과 열을 입력하세요: ");
-    scanf("%d %d", &row, &col);
-    if(row < 1 || row > 15 || col < 1 || col > 15) {
-        printf("1에서 15 사이의 행과 열을 입력하세요.\n");
-        inputMove();
-        return;
+    int row = 0;
+    int col = 0;
+    int validInput = 0;
+
+    while (!validInput) {
+        printf("Enter row and column: ");
+        scanf("%d %d", &row, &col);
+
+        if (row < 1 || row > 15 || col < 1 || col > 15) {
+            printf("Please enter a row and column between 1 and 15.\n");
+        } else if (!isValidPlace(row - 1, col - 1)) {
+            printf("Invalid position.\n");
+        } else {
+            validInput = 1;
+        }
     }
-    placeStone(row-1, col-1, turn);
+
+    if (validInput) {
+        placeStone(row-1, col-1, turn);
+    }
 }
 void placeStone(int row, int col, int color) {
     if(isValidPlace(row, col)) {
         board[row][col] = color;
         turn = (turn == BLACK) ? WHITE : BLACK;
         newTurn();
-    }else{
-        printf("잘못된 위치입니다.\n");
-        inputMove();
+    }
+    else{
+        printf("Invalid position.\n");
     }
 }
 

@@ -16,10 +16,10 @@ void initBoard(){
 // returns the character to be printed for a given position on the board
 static wchar_t onBoard(int row, int col){
     if(board[row][col] == BLACK){
-        return L'\u25CF';
+        return L'\u25CB';
     }
     if(board[row][col] == WHITE){
-        return L'\u25CB';
+        return L'\u25CF';
     }
 
     if(row == 0 && col == 0) return L'\u250C';

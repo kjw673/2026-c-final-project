@@ -1,6 +1,6 @@
 # ==============================================================================
-# 프로젝트 Makefile
-# 공개된 표준 GCC Makefile 빌드 패턴을 참고하여, 프로젝트 경로에 맞게 수정함
+# Project Makefile
+# Adapted from a standard GCC Makefile build pattern for this project.
 # ==============================================================================
 
 CC = gcc

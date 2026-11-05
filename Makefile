@@ -15,14 +15,22 @@ TARGET = $(BIN_DIR)/GomokuProject.exe
 
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+TEST_SOURCE = test/test.c
+TEST_TARGET = $(BIN_DIR)/test.exe
 
 all: $(TARGET)
 
 run: $(TARGET)
 	./$(TARGET)
 
+test: $(TEST_TARGET)
+	./$(TEST_TARGET)
+
 $(TARGET): $(OBJS) | $(BIN_DIR)
 	$(CC) $(CFLAGS) $^ -o $@
+
+$(TEST_TARGET): $(TEST_SOURCE) | $(BIN_DIR)
+	$(CC) $(CFLAGS) $< -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -36,4 +44,4 @@ $(BIN_DIR):
 clean:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
-.PHONY: all clean run
+.PHONY: all clean run test
